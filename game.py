@@ -2,7 +2,7 @@ from prompts import yes_no, int_input
 
 class game:
   
-  def __init__(self, name, player_num, default_elo, has_mappool, has_charpool, mappool, charpool):
+  def __init__(self, name, player_num=0, default_elo=0, has_mappool=False, has_charpool=False, mappool=[], charpool=[]):
     self.game_name = name
     self.player_num = player_num
     self.default_elo = default_elo
@@ -10,6 +10,7 @@ class game:
     self.has_charpool = has_charpool
     self.mappool = mappool
     self.charpool = charpool
+    self.players = []
 
   def add_map(self):
     #Adding Maps
