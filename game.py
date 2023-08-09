@@ -1,9 +1,10 @@
 from prompts import yes_no, int_input
 
-class game:
+class game_class:
   
-  def __init__(self, name, player_num=0, default_elo=0, has_mappool=False, has_charpool=False, mappool=[], charpool=[]):
+  def __init__(self, name, version, player_num=0, default_elo=0, has_mappool=False, has_charpool=False, mappool=[], charpool=[]):
     self.game_name = name
+    self.version = version
     self.player_num = player_num
     self.default_elo = default_elo
     self.has_mappool = has_mappool
@@ -30,7 +31,7 @@ class game:
         self.charpool.append(added_char)
       self.charpool.pop()
   
-  def modify(self):
+  def modify(self, current_version):
     if yes_no("Would you like to change the name of the game?"):
       self.game_name = input("Type new game name: ")
     
@@ -49,5 +50,7 @@ class game:
       if yes_no("Would you like to remove the character pool?"):
         self.has_charpool = False
         self.charpool.clear()
+    
+    self.version = current_version
     
     print("Game successfully modified!")
