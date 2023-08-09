@@ -1,3 +1,5 @@
+from prompts import yes_no, int_input
+
 class game:
   
   def __init__(self):
@@ -5,25 +7,18 @@ class game:
     self.charpool = []
     
     self.game_name = input("Please enter the name of the game: ")
-    self.player_num = int(input("Please enter the number of players that will play in each match: ")) # fix this to deny invalid inputs
-    self.default_elo = int(input("Please enter the default elo of players for the game: ")) # this too
+    self.player_num = int_input("Please enter the number of players that will play in each match: ")
+    self.default_elo = int_input("Please enter the default elo of players for the game: ")
     
     #Maps
     self.has_mappool = False
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Does your game have a map pool? (y/n): ")
-    if response == "y":
+    if yes_no("Does your game have a map pool?"):
       self.has_mappool = True
-      #Adding Maps
       self.add_map()
 
     #Characters
     self.has_charpool = False
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Does your game have a character pool? (y/n): ")
-    if response == "y":
+    if yes_no("Does your game have a character pool?"):
       self.has_charpool = True
       #Adding Characters
       self.add_char()
@@ -47,34 +42,19 @@ class game:
       self.charpool.pop()
   
   def modify(self):
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Would you like to change the name of the game? (y/n): ")
-    if response == 'y':
+    if yes_no("Would you like to change the name of the game?"):
       self.game_name = input("Type new game name: ")
     
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Would you like to change player count of each match? (y/n): ")
-    if response == 'y':
-      self.player_num = int(input("Enter new player number: "))
+    if yes_no("Would you like to change player count of each match?"):
+      self.player_num = int_input("Enter new player count: ")
     
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Would you like to change the default elo for new players? (y/n): ")
-    if response == 'y':
-      self.player_num = int(input("Enter new default elo: "))
+    if yes_no("Would you like to change the default elo for new players?"):
+      self.player_num = int_input("Enter new default elo: ")
 
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Would you like to remove the map pool?: (y/n) ")
-    if response == 'y':
+    if yes_no("Would you like to remove the map pool?"):
       self.has_mappool = False
       self.mappool.clear()
     
-    response = ""
-    while response != "y" and response != "n":
-      response = input("Would you like to remove the character pool?: (y/n) ")
-    if response == 'y':
+    if yes_no("Would you like to remove the character pool?"):
       self.has_charpool = False
       self.charpool.clear()
