@@ -1,0 +1,22 @@
+[
+  {
+    "game_name": "MC",
+    "version": 0.01,
+    "player_num": 2,
+    "default_elo": 200,
+    "has_mappool": true,
+    "has_charpool": false,
+    "mappool": [
+      "Draze",
+      "Darkgrove",
+      "Tropical",
+      "Subway",
+      "Train"
+    ],
+    "charpool": [],
+    "players": {
+      "Woo": 400,
+      "Feesh": 400
+    }
+  }
+]

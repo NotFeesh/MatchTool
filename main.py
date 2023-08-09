@@ -12,17 +12,34 @@ def load(object, attribute, default):
       print(f"Error: {object['game_name']} has no '{attribute}' attribute. It was set to a default value of {default}.")
       return default
 
+def save(games, save_path):
+   data = []
+   for game in games:
+      temp = {}
+      temp["game_name"] = game.game_name
+      temp["version"] = game.version
+      temp["player_num"] = game.player_num
+      temp["default_elo"] = game.default_elo
+      temp["has_mappool"] = game.has_mappool
+      temp["has_charpool"] = game.has_charpool
+      temp["mappool"] = game.mappool
+      temp["charpool"] = game.charpool
+      temp["players"] = game.players
+      data.append(temp)
+   with open(save_path, 'w') as file:
+      json.dump(data, file, indent=2)
+
 def main():
-   current_version = 0.0
+   current_version = 0.01
 
    games = []
 
    os.system('CLS')
 
-   save = Path('./save.json')
+   save_path = Path('./save.json')
 
-   if save.exists():
-      with open(save, 'r') as file:
+   if save_path.exists():
+      with open(save_path, 'r') as file:
          data = json.load(file) #to list of dictionaries
       
       for obj in data:
@@ -44,7 +61,7 @@ def main():
          games.append(game_class(game_name, version, player_num, default_elo, has_mappool, has_charpool, mappool, charpool, players))
 
 
-   print(f'''Welcome to MatchTool v{version}!
+   print(f'''Welcome to MatchTool v{current_version}!
          
 This tool is still under development, so many features are missing!
 Enter 'help' to view a list of commands
@@ -138,7 +155,7 @@ Default elo for starting players: {game.default_elo}
                      if len(game.players) > 0:
                         print("Players:")
                         for player in game.players:
-                           print(f'{player}\n')
+                           print(f'{player} - {game.players[player]}\n')
                      break
                else:
                   print("Error! That game does not exist.")
@@ -147,21 +164,7 @@ Default elo for starting players: {game.default_elo}
             continue
       
       elif cmd == 'save':
-         data = []
-         for game in games:
-            temp = {}
-            temp["game_name"] = game.game_name
-            temp["version"] = game.version
-            temp["player_num"] = game.player_num
-            temp["default_elo"] = game.default_elo
-            temp["has_mappool"] = game.has_mappool
-            temp["has_charpool"] = game.has_charpool
-            temp["mappool"] = game.mappool
-            temp["charpool"] = game.charpool
-            temp["players"] = game.players
-            data.append(temp)
-         with open(save, 'w') as file:
-            json.dump(data, file, indent=2)
+         save(games, save_path)
       elif cmd == 'exit':
          exit()
       else:

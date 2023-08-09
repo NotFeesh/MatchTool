@@ -77,7 +77,7 @@ class game_class:
       self.player_num = int_input("Enter new player count: ")
     
     if yes_no("Would you like to change the default elo for new players?"):
-      self.player_num = int_input("Enter new default elo: ")
+      self.default_elo = int_input("Enter new default elo: ")
     
     if yes_no("Would you like to add players to the game?"):
       self.add_player()
