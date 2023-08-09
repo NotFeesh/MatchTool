@@ -2,26 +2,14 @@ from prompts import yes_no, int_input
 
 class game:
   
-  def __init__(self):
-    self.mappool = []
-    self.charpool = []
-    
-    self.game_name = input("Please enter the name of the game: ")
-    self.player_num = int_input("Please enter the number of players that will play in each match: ")
-    self.default_elo = int_input("Please enter the default elo of players for the game: ")
-    
-    #Maps
-    self.has_mappool = False
-    if yes_no("Does your game have a map pool?"):
-      self.has_mappool = True
-      self.add_map()
-
-    #Characters
-    self.has_charpool = False
-    if yes_no("Does your game have a character pool?"):
-      self.has_charpool = True
-      #Adding Characters
-      self.add_char()
+  def __init__(self, name, player_num, default_elo, has_mappool, has_charpool, mappool, charpool):
+    self.game_name = name
+    self.player_num = player_num
+    self.default_elo = default_elo
+    self.has_mappool = has_mappool
+    self.has_charpool = has_charpool
+    self.mappool = mappool
+    self.charpool = charpool
 
   def add_map(self):
     #Adding Maps
