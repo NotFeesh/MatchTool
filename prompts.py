@@ -2,7 +2,7 @@ def yes_no(question):
   response = ""
   while response != 'y' and response != 'n' and response != 'yes' and response != 'no':
     response = input(f'{str(question)} (y/n): ').lower()
-  if response == 'y' or response == 'yes' return True else return False
+  return True if response == 'y' or response == 'yes' else False
 
 def int_input(question):
   try:

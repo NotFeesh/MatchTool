@@ -51,10 +51,14 @@ class game:
     if yes_no("Would you like to change the default elo for new players?"):
       self.player_num = int_input("Enter new default elo: ")
 
-    if yes_no("Would you like to remove the map pool?"):
-      self.has_mappool = False
-      self.mappool.clear()
+    if self.has_mappool == True:
+      if yes_no("Would you like to remove the map pool?"):
+        self.has_mappool = False
+        self.mappool.clear()
+  
+    if self.has_charpool == True:
+      if yes_no("Would you like to remove the character pool?"):
+        self.has_charpool = False
+        self.charpool.clear()
     
-    if yes_no("Would you like to remove the character pool?"):
-      self.has_charpool = False
-      self.charpool.clear()
+    print("Game successfully modified!")
