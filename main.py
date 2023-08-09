@@ -3,6 +3,7 @@ from pathlib import Path
 from prompts import int_input, yes_no
 import json
 import os
+from sys import exit
 
 def load(object, attribute, default):
    try:
@@ -12,7 +13,7 @@ def load(object, attribute, default):
       return default
 
 def main():
-   current_version = 0.1
+   current_version = 0.0
 
    games = []
 
@@ -38,8 +39,9 @@ def main():
          has_charpool = load(obj, 'has_charpool', False)
          mappool = load(obj, 'mappool', [])
          charpool = load(obj, 'charpool', [])
+         players = load(obj, 'players', {})
 
-         games.append(game_class(game_name, version, player_num, default_elo, has_mappool, has_charpool, mappool, charpool))
+         games.append(game_class(game_name, version, player_num, default_elo, has_mappool, has_charpool, mappool, charpool, players))
 
 
    print(f'''Welcome to MatchTool v{version}!
@@ -102,12 +104,6 @@ game create - create a new game type
 game list - prints a list of the games currently added
 game detail {game} - prints the details of a specified game
 game modify {game} - modify the match presets of the game type
-game add player {game} {player} - add a player to the game's list of players
-game add map {game} {map} - add a map tothe game's map pool
-game add character {game} {character} - add a character to the character's character pool
-game remove player {game} {player} - remove a player from the game's list of players
-game remove map {game} {map} - remove a map from the game's map pool
-game remove character {game} {character} - removed a character from the game's character pool
                      ''')
             elif args[0] == 'modify':
                for game in games:
@@ -139,6 +135,10 @@ Default elo for starting players: {game.default_elo}
                         print("Char Pool:")
                         for char in game.charpool:
                            print(f'{char}\n')
+                     if len(game.players) > 0:
+                        print("Players:")
+                        for player in game.players:
+                           print(f'{player}\n')
                      break
                else:
                   print("Error! That game does not exist.")
@@ -158,9 +158,12 @@ Default elo for starting players: {game.default_elo}
             temp["has_charpool"] = game.has_charpool
             temp["mappool"] = game.mappool
             temp["charpool"] = game.charpool
+            temp["players"] = game.players
             data.append(temp)
          with open(save, 'w') as file:
             json.dump(data, file, indent=2)
+      elif cmd == 'exit':
+         exit()
       else:
          print("Command does not exist! Please use 'help' for a list of commands!")
 
