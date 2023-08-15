@@ -1,4 +1,5 @@
 from game import game_class
+from match import match_class
 from pathlib import Path
 from prompts import int_input, yes_no
 import json
@@ -28,6 +29,19 @@ def save(games, save_path):
       data.append(temp)
    with open(save_path, 'w') as file:
       json.dump(data, file, indent=2)
+
+def find_game(game_name, games):
+   for game in games:
+      if game.game_name == game_name:
+         return game
+   else:
+      print("Error! Game does not exist!")
+      find_game(game_name, games)
+
+def find_player(player_name, game):
+   for player in game.players:
+      if player == player_name:
+         return player
 
 def main():
    current_version = 0.01
@@ -68,6 +82,8 @@ Enter 'help' to view a list of commands
          
 Please don't forget to run 'save' before closing out of the application!
          ''')
+   
+   
    while True:
       args = input().split(' ')
       cmd = args[0]
@@ -80,6 +96,7 @@ Please don't forget to run 'save' before closing out of the application!
 Here is a list of commands. For more information about each command, type '{cmd} help'.
       
 game - creation and modification of different game types
+match - start a match
                ''')
       elif cmd == 'game':
          try:
@@ -123,50 +140,78 @@ game detail {game} - prints the details of a specified game
 game modify {game} - modify the match presets of the game type
                      ''')
             elif args[0] == 'modify':
-               for game in games:
-                  if game.game_name == args[1]:
-                     os.system('CLS')
-                     game.modify(current_version)
-                     break
-               else:
-                  print("Error! That game does not exist.")
+               game = find_game(args[1], games)
+               os.system('CLS')
+               game.modify(current_version)
             elif args[0] == 'list':
                for game in games:
                   print(f'- {game.game_name}\n')
             elif args[0] == 'detail':
-               for game in games:
-                  if game.game_name == args[1]:
-                     os.system('CLS')
-                     print(f'''{game.game_name}
+               game = find_game(args[1], games)
+               os.system('CLS')
+               print(f'''{game.game_name}
 Version: {game.version} {"(Warning: This game is outdated! Please use 'game modify' to update it!)" if game.version < current_version else ''}
                            
 Players per match: {game.player_num}
 
 Default elo for starting players: {game.default_elo}
    ''')
-                     if game.has_mappool:
-                        print("Map Pool:")
-                        for map in game.mappool:
-                           print(f'{map}\n')
-                     if game.has_charpool:
-                        print("Char Pool:")
-                        for char in game.charpool:
-                           print(f'{char}\n')
-                     if len(game.players) > 0:
-                        print("Players:")
-                        for player in game.players:
-                           print(f'{player} - {game.players[player]}\n')
-                     break
-               else:
-                  print("Error! That game does not exist.")
+               if game.has_mappool:
+                  print("Map Pool:")
+                  for map in game.mappool:
+                     print(f'{map}\n')
+               if game.has_charpool:
+                  print("Char Pool:")
+                  for char in game.charpool:
+                     print(f'{char}\n')
+               if len(game.players) > 0:
+                  print("Players:")
+                  for player in game.players:
+                     print(f'{player} - {game.players[player]}\n')
          except IndexError:
             print("Error: You did not provide enough arguments. Please use 'game help' to see proper usage of commands!")
             continue
-      
+      elif cmd == 'match':
+         try:
+            if args[0] == 'help':
+               print('''Here is more information about the match command and its arguments:
+match start {game_preset}
+''')
+            if args[0] == 'start':
+               match = match_class()
+               game = find_game(args[1], games)
+               
+               for x in range(game.player_num):
+                  player_name = input(f"Enter Player {x}'s name: ")
+                  player = find_player(player_name, game)
+                  match.players[player] = game.players[player]
+               
+               print(f'{game.game_name} MATCH STARTING: ', end="")
+               for index, key in enumerate(match.players):
+                  if index == len(match.players):
+                     print(f"{key} ({match.players[key]})", end="")
+                  print(f"{key} ({match.players[key]}) vs. ", end="")
+               print()
+
+               winner = input("Please enter winner: ")
+               for player in match.players:
+                  if player == winner:
+                     game.players[player] += 50
+                  else:
+                     game.players[player] -= 50
+
+            
+         except IndexError:
+            print("Error: You did not provide enough arguments. Please use 'game help' to see proper usage of commands!")
+            continue
+
       elif cmd == 'save':
          save(games, save_path)
+         print("Successfully saved!")
+
       elif cmd == 'exit':
          exit()
+
       else:
          print("Command does not exist! Please use 'help' for a list of commands!")
 
