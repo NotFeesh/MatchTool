@@ -192,11 +192,22 @@ match start {game_preset}
                      print(f"{key} ({match.players[key]})", end="")
                   print(f"{key} ({match.players[key]}) vs. ", end="")
                print()
+               
+               #elo calculation
+               # winner can NOT lose elo, minimum +1
+               # loser can NOT gain elo, minimum -0
+               winner = find_player(input("Please enter winner: "), game)
+               # calculate average elo of players
+               avg = 0
+               for player in match.players:
+                  avg += match.players[player]
+               avg /= len(match.players)
+               # if winner's elo is more than 500 above average, +0. if winner's elo is less than 500 below average, +100. the rest fall in between
+               diff = abs(game.players[winner] - avg)
 
-               winner = input("Please enter winner: ")
                for player in match.players:
                   if player == winner:
-                     game.players[player] += 50
+                     game.players[winner] += round(diff / 5) if diff / 5 < 100 else 100
                   else:
                      game.players[player] -= 50
 
