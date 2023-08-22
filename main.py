@@ -44,6 +44,7 @@ def find_player(player_name, game):
          return player
 
 def main():
+
    current_version = 0.01
 
    games = []
@@ -73,8 +74,11 @@ def main():
          players = load(obj, 'players', {})
 
          games.append(game_class(game_name, version, player_num, default_elo, has_mappool, has_charpool, mappool, charpool, players))
-
-
+      
+      print('Save file successfully loaded!\n')
+   else:
+      print('No save file found.\n')
+   
    print(f'''Welcome to MatchTool v{current_version}!
          
 This tool is still under development, so many features are missing!
@@ -82,7 +86,6 @@ Enter 'help' to view a list of commands
          
 Please don't forget to run 'save' before closing out of the application!
          ''')
-   
    
    while True:
       args = input().split(' ')
@@ -144,6 +147,8 @@ game modify {game} - modify the match presets of the game type
                os.system('CLS')
                game.modify(current_version)
             elif args[0] == 'list':
+               os.system('CLS')
+               print('Game List:')
                for game in games:
                   print(f'- {game.game_name}\n')
             elif args[0] == 'detail':
@@ -175,7 +180,7 @@ Default elo for starting players: {game.default_elo}
          try:
             if args[0] == 'help':
                print('''Here is more information about the match command and its arguments:
-match start {game_preset}
+match start {game_preset} - Starts a match with the specified game preset
 ''')
             if args[0] == 'start':
                match = match_class()
@@ -214,7 +219,7 @@ match start {game_preset}
             
          except IndexError:
             print("Error: You did not provide enough arguments. Please use 'game help' to see proper usage of commands!")
-            continue
+            continue 
 
       elif cmd == 'save':
          save(games, save_path)
@@ -222,6 +227,12 @@ match start {game_preset}
 
       elif cmd == 'exit':
          exit()
+
+      elif cmd == 'restart':
+         main()
+      
+      elif cmd =='clear':
+         os.system('CLS')
 
       else:
          print("Command does not exist! Please use 'help' for a list of commands!")
